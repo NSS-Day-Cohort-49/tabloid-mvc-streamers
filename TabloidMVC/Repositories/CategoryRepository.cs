@@ -106,6 +106,7 @@ namespace TabloidMVC.Repositories
                             WHERE Id = @id";
 
                     cmd.Parameters.AddWithValue("@name", category.Name);
+                    cmd.Parameters.AddWithValue("@id", category.Id);
                     cmd.ExecuteNonQuery();
                 }
             }
