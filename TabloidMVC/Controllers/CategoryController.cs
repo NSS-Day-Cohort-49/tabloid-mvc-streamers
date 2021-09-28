@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using TabloidMVC.Models;
 using TabloidMVC.Repositories;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TabloidMVC.Controllers
 {
@@ -18,6 +20,7 @@ namespace TabloidMVC.Controllers
             _categoryRepository = categoryRepository;
         }
         // GET: CategoryController
+        [Authorize]
         public ActionResult Index()
         {
             var categories = _categoryRepository.GetAll();
@@ -28,27 +31,31 @@ namespace TabloidMVC.Controllers
         // GET: CategoryController/Details/5
         public ActionResult Details(int id)
         {
+
             return View();
         }
 
         // GET: CategoryController/Create
+        [Authorize]
         public ActionResult Create()
         {
             return View();
         }
 
         // POST: CategoryController/Create
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Category category)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _categoryRepository.Add(category);
+                return RedirectToAction("Index");
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return View(category);
             }
         }
 
