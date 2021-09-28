@@ -20,7 +20,9 @@ namespace TabloidMVC.Controllers
         // GET: UserController
         public ActionResult Index()
         {
-            return View();
+            var users = _userProfileRepository.GetAllUsers();
+
+            return View(users);
         }
 
         // GET: UserController/Details/5

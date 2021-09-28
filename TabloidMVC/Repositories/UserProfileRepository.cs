@@ -17,7 +17,31 @@ namespace TabloidMVC.Repositories
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
+                    cmd.CommandText = @"
+                        SELECT up.Id, up.DisplayName, up.FirstName, up.LastName, up.UserTypeId, ut.Name
+                        FROM  UserProfile up
+                            LEFT JOIN UserType ut ON up.UserTypeId = ut.Id
+                        ORDER BY DisplayName ASC";
 
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    List<UserProfile> users = new List<UserProfile>();
+
+                    while (reader.Read())
+                    {
+                        UserProfile user = new UserProfile
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                            LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                            DisplayName = reader.GetString(reader.GetOrdinal("DisplayName")),
+                            UserTypeId = reader.GetInt32(reader.GetOrdinal("UserTypeId"))
+                        };
+                        users.Add(user);
+                    }
+
+                    reader.Close();
+                    return users;
                 }
             }
         }
