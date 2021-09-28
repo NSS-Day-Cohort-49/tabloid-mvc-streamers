@@ -31,7 +31,7 @@
                 @Html.DisplayFor(modelItem => item.FullName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.UserTypeId)
+                @Html.DisplayFor(modelItem => item.UserType.Name)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new {  id=item.Id  }) |
