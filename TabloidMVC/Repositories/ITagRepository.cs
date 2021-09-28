@@ -5,6 +5,8 @@ namespace TabloidMVC.Repositories
 {
     public interface ITagRepository
     {
-        List<Tag> GetAllTags(); 
+        List<Tag> GetAllTags();
+
+        void Add(Tag tag);
     }
 }
