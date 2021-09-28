@@ -1,12 +1,26 @@
 ﻿using Microsoft.Extensions.Configuration;
 using TabloidMVC.Models;
 using TabloidMVC.Utils;
+using System.Collections.Generic;
+using Microsoft.Data.SqlClient;
 
 namespace TabloidMVC.Repositories
 {
     public class UserProfileRepository : BaseRepository, IUserProfileRepository
     {
         public UserProfileRepository(IConfiguration config) : base(config) { }
+
+        public List<UserProfile> GetAllUsers()
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+
+                }
+            }
+        }
 
         public UserProfile GetByEmail(string email)
         {
