@@ -33,6 +33,9 @@ namespace TabloidMVC.Repositories
                             Id = reader.GetInt32(reader.GetOrdinal("Id")),
                             Name = reader.GetString(reader.GetOrdinal("Name")),
                         };
+
+                        tags.Add(tag);
+
                     }
                     reader.Close();
                     return tags;
