@@ -11,6 +11,12 @@ namespace TabloidMVC.Controllers
 {
     public class UserController : Controller
     {
+        private readonly IUserProfileRepository _userProfileRepository;
+
+        public UserController(IUserProfileRepository userProfileRepository)
+        {
+            _userProfileRepository = userProfileRepository;
+        }
         // GET: UserController
         public ActionResult Index()
         {
