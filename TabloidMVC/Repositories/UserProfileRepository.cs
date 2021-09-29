@@ -35,8 +35,13 @@ namespace TabloidMVC.Repositories
                             FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
                             LastName = reader.GetString(reader.GetOrdinal("LastName")),
                             DisplayName = reader.GetString(reader.GetOrdinal("DisplayName")),
-                            UserTypeId = reader.GetInt32(reader.GetOrdinal("UserTypeId"))
+                            UserTypeId = reader.GetInt32(reader.GetOrdinal("UserTypeId")),
+                            UserType = new UserType
+                            {
+                                Name = reader.GetString(reader.GetOrdinal("Name"))
+                            }
                         };
+
                         users.Add(user);
                     }
 
