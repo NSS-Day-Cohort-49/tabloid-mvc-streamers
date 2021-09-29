@@ -84,14 +84,14 @@ namespace TabloidMVC.Controllers
         // GET: Post/Edit
         public IActionResult Edit(int id)
         {
-            Post post = _postRepoository.GetUserPostById(id);
+            var post = _postRepository.GetUserPostById(id);
             
             if (id == null)
             {
                 return NotFound();
             }
 
-            return View(id);
+            return View(post);
 
         }
 
