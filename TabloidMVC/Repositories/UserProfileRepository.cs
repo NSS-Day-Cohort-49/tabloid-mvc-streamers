@@ -51,6 +51,56 @@ namespace TabloidMVC.Repositories
             }
         }
 
+        public UserProfile GetUserById(int id)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                               SELECT up.[Id], up.FirstName, up.LastName, up.DisplayName, up.Email, 
+                                      up.CreateDateTime, up.ImageLocation, up.UserTypeId, ut.Name
+                               FROM UserProfile up
+                                    LEFT JOIN UserType ut ON up.UserTypeId = ut.Id
+                               WHERE up.[Id] = @id";
+
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    UserProfile userProfile = null;
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        userProfile = new UserProfile()
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                            LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                            DisplayName = reader.GetString(reader.GetOrdinal("DisplayName")),
+                            Email = reader.GetString(reader.GetOrdinal("Email")),
+                            CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
+                            ImageLocation = DbUtils.GetNullableString(reader, "ImageLocation"),
+                            UserTypeId = reader.GetInt32(reader.GetOrdinal("UserTypeId")),
+                            UserType = new UserType
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                Name = reader.GetString(reader.GetOrdinal("Name"))
+                            },
+                        };
+
+                        reader.Close();
+                        return userProfile;
+                    }
+                    else
+                    {
+                        reader.Close();
+                        return null;
+                    }
+                }
+            }
+        }
+
         public UserProfile GetByEmail(string email)
         {
             using (var conn = Connection)
