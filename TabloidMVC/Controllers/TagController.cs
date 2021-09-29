@@ -34,57 +34,67 @@ namespace TabloidMVC.Controllers
         // POST: TagController1/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Tag tag)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _tagRepository.Add(tag);
+                return RedirectToAction("Index");
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return View(tag);
             }
         }
 
         // GET: TagController1/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var tag = _tagRepository.GetTagById(id);
+            if (tag == null)
+            {
+                return NotFound();
+            }
+            return View(tag);
         }
 
         // POST: TagController1/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, Tag tag)
         {
+
             try
             {
-                return RedirectToAction(nameof(Index));
+                _tagRepository.Update(tag);
+                return RedirectToAction("Index");
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return View(tag);
             }
         }
 
         // GET: TagController1/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var tag = _tagRepository.GetTagById(id);
+            return View(tag);
         }
 
         // POST: TagController1/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, Tag tag)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _tagRepository.Remove(id);
+                return RedirectToAction("Index");
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return View(tag);
             }
         }
 
