@@ -100,7 +100,6 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
-
         public UserProfile GetByEmail(string email)
         {
             using (var conn = Connection)

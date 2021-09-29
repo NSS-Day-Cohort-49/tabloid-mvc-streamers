@@ -76,7 +76,7 @@ namespace TabloidMVC.Controllers
         }
 
         // GET: UserController/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Deactivate(int id)
         {
             return View();
         }
@@ -84,7 +84,7 @@ namespace TabloidMVC.Controllers
         // POST: UserController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Deactivate(int id, IFormCollection collection)
         {
             try
             {
