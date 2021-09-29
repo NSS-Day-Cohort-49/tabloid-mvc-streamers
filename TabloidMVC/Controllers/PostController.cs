@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualBasic;
 using System.Security.Claims;
+using TabloidMVC.Models;
 using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
 
@@ -13,11 +14,13 @@ namespace TabloidMVC.Controllers
     {
         private readonly IPostRepository _postRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IUserProfileRepository _userProfileRepository;
 
-        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository)
+        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, IUserProfileRepository userProfileRepository)
         {
             _postRepository = postRepository;
             _categoryRepository = categoryRepository;
+            _userProfileRepository = userProfileRepository;
         }
 
         public IActionResult Index()
@@ -84,9 +87,9 @@ namespace TabloidMVC.Controllers
         // GET: Post/Edit
         public IActionResult Edit(int id)
         {
-            var post = _postRepository.GetUserPostById(id);
+            var post = _postRepository.GetPublishedPostById(id);
             
-            if (id == null)
+            if (post == null)
             {
                 return NotFound();
             }
@@ -96,6 +99,7 @@ namespace TabloidMVC.Controllers
         }
 
         // POST: Post/Edit
+        [HttpPost]
         public IActionResult Edit(int id, Post post)
         {
             try
