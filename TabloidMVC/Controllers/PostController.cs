@@ -15,12 +15,14 @@ namespace TabloidMVC.Controllers
     {
         private readonly IPostRepository _postRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IUserProfileRepository _userProfileRepository;
         private readonly ITagRepository _tagRepository;
 
-        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, ITagRepository tagRepository)
+        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, IUserProfileRepository userProfileRepository)
         {
             _postRepository = postRepository;
             _categoryRepository = categoryRepository;
+            _userProfileRepository = userProfileRepository;
             _tagRepository = tagRepository;
         }
 
@@ -91,6 +93,35 @@ namespace TabloidMVC.Controllers
         {
             string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return int.Parse(id);
+        }
+
+        // GET: Post/Edit
+        public IActionResult Edit(int id)
+        {
+            var post = _postRepository.GetPublishedPostById(id);
+            
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            return View(post);
+
+        }
+
+        // POST: Post/Edit
+        [HttpPost]
+        public IActionResult Edit(int id, Post post)
+        {
+            try
+            {
+                _postRepository.UpdatePost(post);
+                return RedirectToAction("Details", new { id = post.Id });
+            }
+            catch
+            {
+                return View(post);
+            }
         }
     }
 }
