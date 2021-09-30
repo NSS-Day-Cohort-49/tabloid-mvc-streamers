@@ -88,6 +88,7 @@ namespace TabloidMVC.Controllers
         {
             try
             {
+                user = _userProfileRepository.GetUserById(id);
                 _userProfileRepository.IsActiveUser(user);
                 return RedirectToAction("Index");
             }
