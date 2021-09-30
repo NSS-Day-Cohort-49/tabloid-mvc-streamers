@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualBasic;
+using System.Collections.Generic;
 using System.Security.Claims;
 using TabloidMVC.Models;
 using TabloidMVC.Models.ViewModels;
@@ -17,12 +18,14 @@ namespace TabloidMVC.Controllers
         private readonly IPostRepository _postRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IUserProfileRepository _userProfileRepository;
+        private readonly ITagRepository _tagRepository;
 
-        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, IUserProfileRepository userProfileRepository)
+        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, IUserProfileRepository userProfileRepository, ITagRepository tagRepository)
         {
             _postRepository = postRepository;
             _categoryRepository = categoryRepository;
             _userProfileRepository = userProfileRepository;
+            _tagRepository = tagRepository;
         }
 
         public IActionResult Index()
@@ -50,8 +53,36 @@ namespace TabloidMVC.Controllers
                     return NotFound();
                 }
             }
-            return View(post);
+            List<Tag> tags = _tagRepository.GetAllTags();
+            var postId = _postRepository.GetTagsByPostId(post.Id);
+            var vm = new PostTagViewModel()
+            {
+                Post = post,
+                Tags = tags,
+                PostId = postId
+                
+            };
+
+            return View(vm);
         }
+
+        public IActionResult TagManagement()
+        {
+
+            List<Tag> tags = _tagRepository.GetAllTags();
+
+            return View(tags);
+
+        }
+
+
+        //Would be used to save the tag to a post.
+        //Did not finish all the methods to save a post to a tag
+/*        public IActionResult AddPostTag()
+        {
+            List<Tag> tags = _tagRepository.GetAllTags();
+
+        }*/
 
         public IActionResult Create()
         {
@@ -113,6 +144,13 @@ namespace TabloidMVC.Controllers
             {
                 return View(post);
             }
+        }
+
+        public IActionResult InsertTag(int post, int tag)
+        {
+            _postRepository.InsertTag(post, tag);
+
+            return RedirectToAction("Details", new { id = post });
         }
         // GET: Post/Delete
         [Authorize]

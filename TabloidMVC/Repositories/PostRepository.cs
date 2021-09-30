@@ -6,6 +6,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using TabloidMVC.Models;
 using TabloidMVC.Utils;
+using TabloidMVC.Models.ViewModels;
 
 namespace TabloidMVC.Repositories
 {
@@ -274,6 +275,59 @@ namespace TabloidMVC.Repositories
 
                     cmd.Parameters.AddWithValue("@id", id);
                     cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void InsertTag(int post, int tag)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+
+                using(var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO PostTag (PostId, TagId)
+                                        VALUES (@postId, @tagId)";
+
+                    cmd.Parameters.AddWithValue("@postId", post);
+                    cmd.Parameters.AddWithValue("@tagId", tag);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public List<Tag> GetTagsByPostId(int postId)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT t.Id, t.Name
+                                        FROM PostTag pt
+                                        FULL JOIN Tag t on t.Id = pt.tagId
+                                        WHERE pt.postId = @postId";
+
+                    cmd.Parameters.AddWithValue("@postId", postId);
+
+                    var reader = cmd.ExecuteReader();
+
+                    List<Tag> tags = new List<Tag>();
+
+                    while (reader.Read())
+                    {
+                        var tag = new Tag()
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            Name = reader.GetString(reader.GetOrdinal("Name"))
+
+                        };
+                        tags.Add(tag);
+
+                    }
+                    reader.Close();
+                    return tags;
                 }
             }
         }
