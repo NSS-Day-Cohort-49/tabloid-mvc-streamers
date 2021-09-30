@@ -59,13 +59,30 @@ namespace TabloidMVC.Controllers
             {
                 Post = post,
                 Tags = tags,
+                PostId = postId
                 
             };
 
             return View(vm);
         }
 
+        public IActionResult TagManagement()
+        {
 
+            List<Tag> tags = _tagRepository.GetAllTags();
+
+            return View(tags);
+
+        }
+
+
+        //Would be used to save the tag to a post.
+        //Did not finish all the methods to save a post to a tag
+/*        public IActionResult AddPostTag()
+        {
+            List<Tag> tags = _tagRepository.GetAllTags();
+
+        }*/
 
         public IActionResult Create()
         {
