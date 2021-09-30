@@ -29,6 +29,12 @@ namespace TabloidMVC.Controllers
         public ActionResult Details(int id)
         {
             UserProfile user = _userProfileRepository.GetUserById(id);
+            UserProfile activeUser = _userProfileRepository.IsActiveUser(id);
+
+            if (activeUser.IsActive == false)
+            {
+                return null;
+            }
 
             return View(user);
         }
@@ -78,7 +84,8 @@ namespace TabloidMVC.Controllers
         // GET: UserController/Delete/5
         public ActionResult Deactivate(int id)
         {
-            return View();
+            UserProfile user = _userProfileRepository.GetUserById(id);
+            return View(user);
         }
 
         // POST: UserController/Delete/5
