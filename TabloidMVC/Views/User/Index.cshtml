@@ -38,7 +38,7 @@
                 @Html.ActionLink("Details", "Details", new {  id=item.Id  }) |
                 @if (item.IsActive == true)
                  {
-                    @Html.ActionLink("Deactivate", "Deactivate", new { id = item.Id })
+                    @Html.ActionLink("Disable", "Deactivate", new { id = item.Id })
                  }
                 else
                 {

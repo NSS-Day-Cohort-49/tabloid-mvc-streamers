@@ -29,13 +29,6 @@ namespace TabloidMVC.Controllers
         public ActionResult Details(int id)
         {
             UserProfile user = _userProfileRepository.GetUserById(id);
-            UserProfile activeUser = _userProfileRepository.IsActiveUser(id);
-
-            if (activeUser.IsActive == false)
-            {
-                return null;
-            }
-
             return View(user);
         }
 
@@ -91,16 +84,38 @@ namespace TabloidMVC.Controllers
         // POST: UserController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Deactivate(int id, IFormCollection collection)
+        public ActionResult Deactivate(int id, UserProfile user)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _userProfileRepository.IsActiveUser(user);
+                return RedirectToAction("Index");
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return View(user);
             }
         }
+        public ActionResult Activate(int id)
+        {
+            UserProfile user = _userProfileRepository.GetUserById(id);
+            return View(user);
+        }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Activate(int id, UserProfile user)
+        {
+            try
+            {
+                _userProfileRepository.IsActiveUser(user);
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return View(user);
+            }
+        }
+
     }
 }

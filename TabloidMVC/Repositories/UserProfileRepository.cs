@@ -148,7 +148,7 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
-        public void IsActiveUser(UserProfile userProfile)
+        public void IsActiveUser(UserProfile user)
         {
             using (SqlConnection conn = Connection)
             {
@@ -161,8 +161,8 @@ namespace TabloidMVC.Repositories
                                 IsActive = @isActive
                             WHERE Id = @id";
 
-                    cmd.Parameters.AddWithValue("@id", userProfile.Id);
-                    cmd.Parameters.AddWithValue("isActive", userProfile.IsActive == true ? false : userProfile.IsActive);
+                    cmd.Parameters.AddWithValue("@id", user.Id);
+                    cmd.Parameters.AddWithValue("isActive", !user.IsActive);
                     cmd.ExecuteNonQuery();
                 }
             }
