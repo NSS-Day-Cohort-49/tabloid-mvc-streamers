@@ -7,6 +7,8 @@ using System.Security.Claims;
 using TabloidMVC.Models;
 using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace TabloidMVC.Controllers
 {
@@ -132,6 +134,31 @@ namespace TabloidMVC.Controllers
             _postRepository.InsertTag(post, tag);
 
             return RedirectToAction("Details", new { id = post });
+        }
+        // GET: Post/Delete
+        [Authorize]
+        public ActionResult Delete(int id)
+        {
+            Post post = _postRepository.GetPublishedPostById(id);
+            return View(post);
+        }
+
+        // POST: Post/Delete/
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id, Post post)
+        {
+            try
+            {
+                post = _postRepository.GetPublishedPostById(id);
+                _postRepository.DeletePost(id);
+                return RedirectToAction("MyPost");
+            }
+            catch 
+            {
+                return View("Details", new {id = post.Id});
+            }
         }
     }
 }
